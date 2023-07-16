@@ -73,9 +73,9 @@ class SAC(torch.nn.Module):
         # Synchronize weights of original critic networks and corresponding target critic networks
         self.target_critic_1.load_state_dict(self.critic_1.state_dict())
         self.target_critic_2.load_state_dict(self.critic_2.state_dict())
-        self.actor_optimizer = torch.optim.AdamW(self.actor.parameters(), lr=actor_lr)
-        self.critic_1_optimizer = torch.optim.AdamW(self.critic_1.parameters(), lr=critic_lr)
-        self.critic_2_optimizer = torch.optim.AdamW(self.critic_2.parameters(), lr=critic_lr)
+        self.actor_optimizer = torch.optim.Adam(self.actor.parameters(), lr=actor_lr)
+        self.critic_1_optimizer = torch.optim.Adam(self.critic_1.parameters(), lr=critic_lr)
+        self.critic_2_optimizer = torch.optim.Adam(self.critic_2.parameters(), lr=critic_lr)
         # uuse log of alpha for more stabilized training
         self.log_alpha = torch.tensor(np.log(0.01), dtype=torch.float)
         self.log_alpha.requires_grad = True  # alpha can be optimized
