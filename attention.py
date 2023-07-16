@@ -28,18 +28,23 @@ class Attention(torch.nn.Module):
         torch.nn.init.xavier_uniform_(self.o_proj.weight)
         self.o_proj.bias.data.fill_(0)
         
-    def forward(self, ego, oppo, return_attention=False):
+    def forward(self, ego, oppo):
+        # Accept both batched and unbatched input
+        is_batched = ego.dim() > 1
+        if not is_batched:
+            ego = ego.unsqueeze(0)
+            oppo = oppo.unsqueeze(0)
+        batch_size = ego.size(0)
+
         # Compute and separate Q, K, V from linear output
-        q = self.q_proj(ego).reshape(self.num_heads, 1, self.head_dim)
-        k, v = self.kv_proj(oppo).reshape(oppo.size()[0], self.num_heads, 2*self.head_dim).permute(1, 0, 2).chunk(2, dim=-1)
+        q = self.q_proj(ego).reshape(batch_size, self.num_heads, 1, self.head_dim)
+        k, v = self.kv_proj(oppo).reshape(batch_size, oppo.size()[1], self.num_heads, 2*self.head_dim).permute(0, 2, 1, 3).chunk(2, dim=-1)
+
         # Determine value and attention outputs
         attn_logits = torch.matmul(q, k.transpose(-2, -1)) # broadcasting
         attn_logits = attn_logits / math.sqrt(self.head_dim) # d_k == head_dim
         attention = F.softmax(attn_logits, dim=-1)
-        values = torch.matmul(attention, v).reshape(self.embed_dim)
+        values = torch.matmul(attention, v).reshape(batch_size, self.embed_dim)
         o = self.o_proj(values)
 
-        if return_attention:
-            return o, attention
-        else:
-            return o
+        return o if is_batched else o.squeeze(0)
