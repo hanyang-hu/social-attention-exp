@@ -5,6 +5,7 @@ import torch
 import random
 from SAC import SAC
 import rl_utils
+import os
 
 # Initiate environment
 env = gym.make('highway-fast-v0')
@@ -37,14 +38,14 @@ random.seed(0)
 np.random.seed(0)
 torch.manual_seed(0)
 
-actor_lr = 3e-4
-critic_lr = 3e-3
-alpha_lr = 3e-4
-num_episodes = 1000
-hidden_dim = [128, 64, 32]
-gamma = 0.99
+actor_lr = 5e-4
+critic_lr = 5e-4
+alpha_lr = 5e-4
+num_episodes = 100
+hidden_dim = [128, 64, 64, 32]
+gamma = 0.8
 tau = 0.005 # hyp for soft update
-buffer_size = 100000
+buffer_size = 15000
 minimal_size = 200
 batch_size = 64
 target_entropy = -2.0 # 2-D action space maximal entropy is 2
@@ -55,20 +56,24 @@ agent = SAC(state_dim, hidden_dim, action_dim, action_bound, actor_lr, critic_lr
 
 return_list = rl_utils.train_off_policy_agent(env, agent, num_episodes, replay_buffer, minimal_size, batch_size)
 
-torch.save(agent.state_dict(), "./sac_attn_01.pt")
+folder_path = "./results/result01/"
+
+os.makedirs(folder_path, exist_ok=True)
+
+torch.save(agent.state_dict(), folder_path + "sac_attn.pt")
 
 episodes_list = list(range(len(return_list)))
 plt.plot(episodes_list, return_list)
 plt.xlabel('Episodes')
 plt.ylabel('Returns')
 plt.title('SAC on {}'.format('highway-fast-v0'))
-plt.savefig('returns.png')
+plt.savefig(folder_path + "returns.png")
 
 mv_return = rl_utils.moving_average(return_list, 9)
 plt.plot(episodes_list, mv_return)
 plt.xlabel('Episodes')
 plt.ylabel('Returns')
 plt.title('SAC on {}'.format('highway-fast-v0'))
-plt.savefig('moving_avg.png')
+plt.savefig(folder_path + "moving_avg.png")
 
 print("Training completed!!!")
