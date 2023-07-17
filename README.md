@@ -12,7 +12,7 @@ python train.py
 
 ## To-do List
 
-- [x] Try out [DiscreteMetaAction](http://highway-env.farama.org/actions/#discrete-meta-actions) (which clearly avoids the problem from the agent to go crazy, and we put rgn_render on so that you can actually see how it performs.)
+- [x] Try out [DiscreteMetaAction](http://highway-env.farama.org/actions/#discrete-meta-actions) (which clearly avoids the problem from the agent to go crazy, and we put rgn_render on so that you can actually see how it performs. New issue: discrete SAC is not working well, target_entropy setting is sus, see [this paper](https://arxiv.org/pdf/2112.02852.pdf))
 
 - [ ] Treat a trained agent as expert (or maybe collect manual control data) and try out [GAIL](https://arxiv.org/pdf/1606.03476.pdf) 
 
