@@ -16,7 +16,7 @@ python train.py
 
 2, Treat a trained agent as expert (or maybe collect manual control data) and try out GAIL 
 
-3, Incorporate DRQN to enhance performance (maybe refer to this [Playing FPS Games with Deep Reinforcement Learning](paper https://arxiv.org/pdf/1609.05521.pdf))
+3, Incorporate DRQN to enhance performance (maybe refer to this [Playing FPS Games with Deep Reinforcement Learning](https://arxiv.org/pdf/1609.05521.pdf))
 
 ## Results
 
