@@ -12,11 +12,11 @@ python train.py
 
 ## To-do List
 
-1, Try out [DiscreteMetaAction](http://highway-env.farama.org/actions/#discrete-meta-actions)
+- [x] Try out [DiscreteMetaAction](http://highway-env.farama.org/actions/#discrete-meta-actions) (which clearly avoids the problem from the agent to go crazy, and we put rgn_render on so that you can actually see how it performs.)
 
-2, Treat a trained agent as expert (or maybe collect manual control data) and try out [GAIL](https://arxiv.org/pdf/1606.03476.pdf) 
+- [ ] Treat a trained agent as expert (or maybe collect manual control data) and try out [GAIL](https://arxiv.org/pdf/1606.03476.pdf) 
 
-3, Incorporate DRQN to enhance performance (maybe refer to this [Playing FPS Games with Deep Reinforcement Learning](https://arxiv.org/pdf/1609.05521.pdf))
+- [ ] Incorporate DRQN to enhance performance (maybe refer to this [Playing FPS Games with Deep Reinforcement Learning](https://arxiv.org/pdf/1609.05521.pdf))
 
 ## Results
 
