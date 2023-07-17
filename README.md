@@ -1,6 +1,6 @@
 # Social Attention Experiment
 
-An implementation of the paper 'Social Attention for Autonomous Decision-Making in Dense Traffic' with custom modification (experiments with SAC and GAIL).
+An implementation of the paper [Social Attention for Autonomous Decision-Making in Dense Traffic](https://arxiv.org/pdf/1911.12250.pdf) with custom modification (experiments with SAC and GAIL).
 
 We use the low-level continuous action so that it might be harder for the agent to learn from scratch (RGB rendering shows that the agent goes crazy and few other vehicles appeared in the view, probably the attention module is not working at all), perhaps next step is to try out SAC over discrete action space (with the DiscreteMetaAction type).
 
