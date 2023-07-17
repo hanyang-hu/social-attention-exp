@@ -17,3 +17,11 @@ python train.py
 2, Treat a trained agent as expert (or maybe collect manual control data) and try out GAIL 
 
 3, Incorporate DRQN to enhance performance (maybe refer to this paper https://arxiv.org/pdf/1609.05521.pdf)
+
+## Results
+
+### 300 episodes Continuous Action (rewards scale x10)
+
+![image](./result01.png)
+
+
