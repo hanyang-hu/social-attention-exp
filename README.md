@@ -20,7 +20,7 @@ python train.py
 
 ## Results
 
-### 3000 episodes Continuous Action (rewards scale x10)
+### Continuous Action (3000 episodes, reward scale x10)
 
 ![image](./result01.png)
 
