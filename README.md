@@ -12,7 +12,7 @@ python train.py
 
 ## To-do List
 
-- [x] Try out [DiscreteMetaAction](http://highway-env.farama.org/actions/#discrete-meta-actions) (which clearly avoids the problem of the agent going crazy, and we put rgn_render on so that you can actually see how it performs. New issue: discrete SAC is not working well, target_entropy setting is suspicious, see [this paper](https://arxiv.org/pdf/2112.02852.pdf). We'll simply do double DQN or actor critic for the discrete case - though actor critic is preferred as it handles the stochastic environment better.)
+- [x] Try out [DiscreteMetaAction](http://highway-env.farama.org/actions/#discrete-meta-actions) (which clearly avoids the problem of the agent going crazy, and we put rgn_render on so that you can actually see how it performs. New issue: discrete SAC is not working well, target_entropy setting is suspicious, see [this paper](https://arxiv.org/pdf/2112.02852.pdf). We'll simply do double DQN for the discrete case)
 
 - [ ] Treat a trained agent as expert (or maybe collect manual control data) and try out [GAIL](https://arxiv.org/pdf/1606.03476.pdf) 
 
