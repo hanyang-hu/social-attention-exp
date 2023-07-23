@@ -1,6 +1,7 @@
 import torch
 import torch.nn.functional as F
 from torch.distributions import Categorical
+import torch.optim.lr_scheduler as lr_scheduler
 import numpy as np
 from attention import Attention
 
@@ -33,6 +34,7 @@ class DQN(torch.nn.Module):
         self.q_net = QValueNet(state_dim, hidden_dim, action_dim, device).to(device)
         self.target_q_net = QValueNet(state_dim, hidden_dim, action_dim, device).to(device)
         self.optimizer = torch.optim.Adam(self.q_net.parameters(), lr=learning_rate)
+        self.scheduler = lr_scheduler.LinearLR(self.optimizer, start_factor=1.0, end_factor=0.1, total_iters=100)
         self.action_dim = action_dim
         self.gamma = gamma
         self.epsilon = epsilon
@@ -41,18 +43,21 @@ class DQN(torch.nn.Module):
         self.device = device
 
     def take_action(self, state):
-        if np.random.random() < self.epsilon:
+        if self.training and np.random.random() < self.epsilon:
             action = np.random.randint(self.action_dim)
         else:
             state = torch.tensor(np.array([state]), dtype = torch.float).to(self.device)
             action = self.q_net(state).argmax().item()
+            if not self.training:
+                print(self.q_net(state))
         return action 
-    # wow that was simple, why should I consider SAC over discrete action space in the first place?
-    # Answer: I am stupid.
     
     def max_q_value(self, state):
         state = torch.tensor([state], dtype=torch.float).to(self.device)
         return self.q_net(state).max().item()
+    
+    def eps_decay(self):
+        self.epsilon = self.epsilon * 0.9
 
     def update(self, transition_dict):
         states = torch.tensor(np.array(transition_dict['states']), dtype=torch.float).to(self.device)
@@ -176,31 +181,46 @@ if __name__ == '__main__':
     import rl_utils
 
     # Initiate environment
-    env = gym.make('highway-fast-v0', render_mode='rgb_array')
+    config = {
+        "observation": {
+            "type": "Kinematics",
+            "vehicles_count": 15,
+            "features": ["presence", "x", "y", "vx", "vy"],
+            "features_range": {
+                "x": [-100, 100],
+                "y": [-100, 100],
+                "vx": [-20, 20],
+                "vy": [-20, 20]
+            },
+            "absolute": False
+        }
+    }
+    env = gym.make('highway-fast-v0') # , render_mode='rgb_array'
+    env.configure(config)
+    env.config["vehicles_density"] = 1.3
 
     state_dim = 5
     action_dim = 5
-    random.seed(0)
-    np.random.seed(0)
-    torch.manual_seed(0)
+    random.seed(53)
+    np.random.seed(53)
+    torch.manual_seed(53)
 
-    lr = 5e-4
-    num_episodes = 500
+    lr = 1e-3
+    num_episodes = 300 # 3000 episodes in total
     hidden_dim = [256, 256]
-    gamma = 0.8
-    epsilon = 0.01
-    # epsilon_decay = 0.99
-    target_update = 50
-    buffer_size = 15000
-    minimal_size = 200
+    gamma = 0.9
+    epsilon = 0.9
+    target_update = 60
+    buffer_size = 30000
+    minimal_size = 150
     batch_size = 64
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
     replay_buffer = rl_utils.ReplayBuffer(buffer_size)
     agent = DQN(state_dim, hidden_dim, action_dim, lr, gamma, epsilon, target_update, device)
-    return_list = rl_utils.train_off_policy_agent_with_rendering(env, agent, num_episodes, replay_buffer, minimal_size, batch_size)
+    return_list = rl_utils.train_off_policy_agent(env, agent, num_episodes, replay_buffer, minimal_size, batch_size)
 
-    folder_path = "./results/result03/"
+    folder_path = "./results/result11/"
 
     os.makedirs(folder_path, exist_ok=True)
 
@@ -210,14 +230,14 @@ if __name__ == '__main__':
     plt.plot(episodes_list, return_list)
     plt.xlabel('Episodes')
     plt.ylabel('Returns')
-    plt.title('Discrete SAC on {}'.format('highway-fast-v0'))
+    plt.title('Double DQN on {}'.format('highway-fast-v0'))
     plt.savefig(folder_path + "returns.png")
 
     mv_return = rl_utils.moving_average(return_list, 9)
     plt.plot(episodes_list, mv_return)
     plt.xlabel('Episodes')
     plt.ylabel('Returns')
-    plt.title('Discrete SAC on {}'.format('highway-fast-v0'))
+    plt.title('Double DQN on {}'.format('highway-fast-v0'))
     plt.savefig(folder_path + "moving_avg.png")
 
     print("Training completed!!!")
