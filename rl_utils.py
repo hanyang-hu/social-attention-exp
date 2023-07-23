@@ -32,7 +32,7 @@ def moving_average(a, window_size):
 
 def train_off_policy_agent(env, agent, num_episodes, replay_buffer, minimal_size, batch_size):
     return_list = []
-    for i in range(300):
+    for i in range(100):
         with tqdm(total=int(num_episodes/10), desc='Iteration %d' % i) as pbar:
             for i_episode in range(int(num_episodes/10)):
                 episode_return = 0
@@ -57,11 +57,17 @@ def train_off_policy_agent(env, agent, num_episodes, replay_buffer, minimal_size
                 if (i_episode+1) % 10 == 0:
                     pbar.set_postfix({'episode': '%d' % (num_episodes/10 * i + i_episode+1), 'return': '%.3f' % np.mean(return_list[-10:])})
                 pbar.update(1)
+        agent.scheduler.step()
+        try:
+            agent.eps_decay()
+            print("Probability of random exploration (epsilon): ", agent.epsilon)
+        except:
+            pass
     return return_list
 
 def train_off_policy_agent_with_rendering(env, agent, num_episodes, replay_buffer, minimal_size, batch_size):
     return_list = []
-    for i in range(300):
+    for i in range(100):
         with tqdm(total=int(num_episodes/10), desc='Iteration %d' % i) as pbar:
             for i_episode in range(int(num_episodes/10)):
                 episode_return = 0
@@ -82,7 +88,7 @@ def train_off_policy_agent_with_rendering(env, agent, num_episodes, replay_buffe
                         b_s, b_a, b_r, b_ns, b_d = replay_buffer.sample(batch_size)
                         transition_dict = {'states': b_s, 'actions': b_a, 'next_states': b_ns, 'rewards': b_r, 'dones': b_d}
                         agent.update(transition_dict)
-                    image = env.render()
+                    env.render()
                 return_list.append(episode_return)
                 if (i_episode+1) % 10 == 0:
                     pbar.set_postfix({'episode': '%d' % (num_episodes/10 * i + i_episode+1), 'return': '%.3f' % np.mean(return_list[-10:])})
