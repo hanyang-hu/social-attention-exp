@@ -24,4 +24,7 @@ python train.py
 
 ![image](./result01.png)
 
+### Meta-Discrete Action (3000 episodes, reward scale x10)
+
+![image](./result02.png)
 
