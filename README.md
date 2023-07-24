@@ -6,7 +6,7 @@ The first attempt uses the low-level continuous action, which might be harder fo
 
 ## To-do List
 
-- [x] Try out [DiscreteMetaAction](http://highway-env.farama.org/actions/#discrete-meta-actions) (which clearly avoids the problem of the agent going crazy, and we put rgn_render on so that you can actually see how it performs.)
+- [x] Try out [DiscreteMetaAction](http://highway-env.farama.org/actions/#discrete-meta-actions) (which clearly avoids the problem of the agent going crazy, and we put rgb_render on so that you can actually see how it performs.)
 
     * Issue 1: discrete SAC is not working (entropy gets done to 0 quickly and the agent only learns to act FASTER), the target_entropy setting in my code is suspicious according to [this paper](https://arxiv.org/pdf/2112.02852.pdf). We'll do double DQN for the discrete case for simplicity.
     * Issue 2: double DQN appears to be prone to catastrophic forgetting, the displayed result is one of the many attempts that does not turn to keep declining after a peak. The plan is to try out methods that explore & exploit more efficiently so that our Q network does not get to update the sub-optimal transitions only after a period of training, check out [prioritized experience replay](https://arxiv.org/pdf/1511.05952.pdf) or [Bayesian DQN](https://arxiv.org/pdf/1802.04412.pdf).
