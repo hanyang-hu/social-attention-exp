@@ -26,3 +26,7 @@ The first attempt uses the low-level continuous action, which might be harder fo
 
 ![image](./result02.png)
 
+## References
+
+* The implementation of SAC, double DQN and rl_utils.py are adapted from the [Hands on RL](https://github.com/boyu-ai/Hands-on-RL) tutorial.
+
