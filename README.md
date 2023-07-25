@@ -28,5 +28,5 @@ The first attempt uses the low-level continuous action, which might be harder fo
 
 ## References
 
-* The implementation of SAC, double DQN and rl_utils.py are adapted from the [Hands on RL](https://github.com/boyu-ai/Hands-on-RL) tutorial.
+* The implementation of SAC, double DQN and rl_utils.py are adapted from the [Hands on RL](https://github.com/boyu-ai/Hands-on-RL) tutorial. What I did on these implementations is add some small features such as linear learning rate scheduler, epsilon decay, rendering the environment during training time and modifying the architecture of policy and q value networks to be more suitable for using the social attention module and highway-env.
 
