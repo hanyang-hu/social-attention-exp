@@ -14,7 +14,7 @@ The first attempt uses the low-level continuous action, which might be harder fo
 
 - [ ] Treat a trained agent as an expert (or maybe collect manual control data) and try out [GAIL](https://arxiv.org/pdf/1606.03476.pdf) and [CQL](https://arxiv.org/pdf/2006.04779.pdf).
 
-- [ ] Incorporate DRQN to enhance performance (maybe refer to this paper [Playing FPS Games with Deep Reinforcement Learning](https://arxiv.org/pdf/1609.05521.pdf))
+- [ ] Incorporate DRQN and test the performance by removing the velocity information from the state space (maybe refer to this paper [Playing FPS Games with Deep Reinforcement Learning](https://arxiv.org/pdf/1609.05521.pdf))
 
 ## Results
 
